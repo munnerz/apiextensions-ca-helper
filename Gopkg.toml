@@ -1,0 +1,34 @@
+[[override]]
+  name = "k8s.io/api"
+  version = "kubernetes-1.10.0"
+
+[[override]]
+  name = "k8s.io/apimachinery"
+  version = "kubernetes-1.10.0"
+
+[[override]]
+  name = "k8s.io/client-go"
+  version = "kubernetes-1.10.0"
+
+[[override]]
+  name = "k8s.io/apiextensions-apiserver"
+  version = "kubernetes-1.10.0"
+
+[[override]]
+  name = "k8s.io/apiserver"
+  version = "kubernetes-1.10.0"
+
+[[override]]
+  name = "k8s.io/kube-aggregator"
+  version = "kubernetes-1.10.0"
+
+# gengo needs to be manually pinned to the version listed in code-generators
+# Gopkg.toml, because the k8s project does not produce Gopkg.toml files & dep
+# does not parse the Godeps.json file to determine revisions to use.
+[[override]]
+  name = "k8s.io/gengo"
+  revision = "b6c426f7730e6d66e6e476a85d1c3eb7633880e0"
+
+[[override]]
+  name = "k8s.io/kube-openapi"
+  revision = "50ae88d24ede7b8bad68e23c805b5d3da5c8abaf"

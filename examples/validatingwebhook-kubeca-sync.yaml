@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ca-helper-config
+data:
+  config: -|
+    {
+        "validatingWebhookConfigurations": [
+            {
+                "name": "my-apiservice-name",
+                "file": {
+                    "path": "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
+                }
+            }
+        ]
+    }

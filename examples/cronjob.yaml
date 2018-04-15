@@ -1,0 +1,65 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: ca-helper-cronjob
+  namespace: ca-helper-cronjob
+spec:
+  schedule: "*/1 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: ca-helper
+        spec:
+          serviceAccountName: ca-helper-cronjob
+          containers:
+          - name: ca-helper
+            image: quay.io/jetstack/apiextensions-ca-helper:latest
+            args:
+            - -config=/config/config
+            volumeMounts:
+            - name: config
+              mountPath: /config
+          volumes:
+          - name: config
+            configMap:
+              name: ca-helper-config
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: ca-helper-cronjob
+  namespace: ca-helper-cronjob
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRole
+metadata:
+  name: ca-helper-cronjob
+  labels:
+    app: ca-helper
+rules:
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["get"]
+  - apiGroups: ["admissionregistration.k8s.io"]
+    resources: ["validatingwebhookconfigurations", "mutatingwebhookconfigurations"]
+    verbs: ["get", "update"]
+  - apiGroups: ["apiregistration.k8s.io"]
+    resources: ["apiservices"]
+    verbs: ["get", "update"]
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: ca-helper-cronjob
+  labels:
+    app: ca-helper
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: ca-helper-cronjob
+subjects:
+  - name: ca-helper-cronjob
+    namespace: ca-helper-cronjob
+    kind: ServiceAccount
