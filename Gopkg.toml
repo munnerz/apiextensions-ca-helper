@@ -22,6 +22,10 @@
   name = "k8s.io/kube-aggregator"
   version = "kubernetes-1.10.0"
 
+[[override]]
+  name = "github.com/Azure/azure-sdk-for-go"
+  version = "v12.0.0-beta"
+
 # gengo needs to be manually pinned to the version listed in code-generators
 # Gopkg.toml, because the k8s project does not produce Gopkg.toml files & dep
 # does not parse the Godeps.json file to determine revisions to use.
