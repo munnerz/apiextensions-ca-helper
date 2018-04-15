@@ -1,37 +1,23 @@
 package main
 
 import (
-	"fmt"
-
 	"k8s.io/client-go/kubernetes"
-	"k8s.io/client-go/tools/clientcmd"
+	"k8s.io/client-go/rest"
 	apiaggclientset "k8s.io/kube-aggregator/pkg/client/clientset_generated/clientset"
 )
 
 func getKubeClientset() (kubernetes.Interface, error) {
-	apiCfg, err := clientcmd.NewDefaultClientConfigLoadingRules().Load()
+	cfg, err := rest.InClusterConfig()
 	if err != nil {
-		return nil, fmt.Errorf("error loading cluster config: %v", err)
+		return nil, err
 	}
-
-	cfg, err := clientcmd.NewDefaultClientConfig(*apiCfg, &clientcmd.ConfigOverrides{}).ClientConfig()
-	if err != nil {
-		return nil, fmt.Errorf("error building client config: %v", err)
-	}
-
 	return kubernetes.NewForConfig(cfg)
 }
 
 func getKubeAggClientset() (apiaggclientset.Interface, error) {
-	apiCfg, err := clientcmd.NewDefaultClientConfigLoadingRules().Load()
+	cfg, err := rest.InClusterConfig()
 	if err != nil {
-		return nil, fmt.Errorf("error loading cluster config: %s", err.Error())
+		return nil, err
 	}
-
-	cfg, err := clientcmd.NewDefaultClientConfig(*apiCfg, &clientcmd.ConfigOverrides{}).ClientConfig()
-	if err != nil {
-		return nil, fmt.Errorf("error building client config: %v", err)
-	}
-
 	return apiaggclientset.NewForConfig(cfg)
 }
