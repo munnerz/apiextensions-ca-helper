@@ -1,0 +1,6 @@
+FROM BASEIMAGE
+
+ADD apiextensions-ca-helper-ARCH /apiextensions-ca-helper
+
+ENTRYPOINT ["/apiextensions-ca-helper"]
+
